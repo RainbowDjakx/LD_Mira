@@ -1,7 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Gamekit3D.GameCommands;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.Events;
 
 namespace Gamekit3D
 {
@@ -68,6 +70,7 @@ namespace Gamekit3D
 
         protected float m_ShieldActivationTime;
 
+        public UnityEvent OnDeath;
 
         void OnEnable()
         {
@@ -137,6 +140,10 @@ namespace Gamekit3D
         {
             deathAudioPlayer.PlayRandomClip();
             m_EnemyController.animator.SetTrigger(hashDeathParam);
+            if (GetComponent<SendOnBecameInvisible>())
+                GetComponent<SendOnBecameInvisible>().Send();
+
+            OnDeath.Invoke();
         }
 
         public void ActivateShield()
